@@ -104,8 +104,8 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - processing-service
-      - analyzer-service
+      - processing
+      - analyzer
     networks:
       - backend
 
