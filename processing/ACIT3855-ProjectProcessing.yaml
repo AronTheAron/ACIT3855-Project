@@ -1,0 +1,57 @@
+openapi: 3.0.0
+info:
+  title: Processing Service API
+  description: API to retrieve aggregated statistics from player and server events.
+  contact:
+    email: support@gametracker.com
+  version: 1.0.0
+servers:
+  - url: /
+paths:
+  /statistics:
+    get:
+      summary: Retrieve aggregated event statistics
+      description: Returns statistics on player and server events, including counts and numeric metrics.
+      operationId: app.get_statistics
+      responses:
+        "200":
+          description: JSON object containing event statistics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatisticsResponse'
+        "500":
+          description: Internal server error.
+        '404':
+          description: Statistics not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Statistics do not exist"
+
+components:
+  schemas:
+    StatisticsResponse:
+      type: object
+      properties:
+        total_player_events_received:
+          type: integer
+          description: Cumulative number of player events received.
+          example: 1250
+        total_server_events_received:
+          type: integer
+          description: Cumulative number of server events received.
+          example: 875
+        max_player_score:
+          type: integer
+          description: Maximum score recorded for any player event.
+          example: 500
+        avg_cpu_usage:
+          type: number
+          format: float
+          description: Average CPU usage across all server events.
+          example: 65.4
