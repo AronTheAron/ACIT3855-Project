@@ -1,0 +1,6 @@
+version: 1
+kafka:
+  hostname: kafka  
+  port: 9092       
+datastore:
+  filepath: /anomaly/anomalies.json  

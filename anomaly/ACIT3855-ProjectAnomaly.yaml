@@ -4,7 +4,7 @@ info:
   version: "1.0.0"
   title: Anomaly API
   contact:
-    email: student@bcit.ca # CHANGE THIS
+    email: awong540@my.bcit.ca
 
 paths:
   /update:
@@ -22,7 +22,7 @@ paths:
                 properties:
                   anomalies_count:
                     type: integer
-                    example: 1000
+                    example: 5
   /anomalies:
     get:
       summary: Gets the anomalies
@@ -34,7 +34,7 @@ paths:
           description: Filter by event type (EVENT1, EVENT2) - shows all anomalies if not provided
           schema:
             type: string
-            example: EVENT1 # CHANGE THIS
+            example: PlayerActivityEvent
       responses:
         '200':
           description: Successfully returned a non-empty list of anomalies of the given event type
@@ -70,29 +70,24 @@ components:
     Anomaly:
       required:
       - id
-      - event_id
       - trace_id
       - event_type
-      - anomaly_type
       - description
       properties:
         id:
-          type: integer
-          example: 500000
-        event_id:
           type: string
-          example: A1234
+          description: Unique identifier of the event
+          example: "A1234"
         trace_id:
           type: string
-          example: A12345
+          description: Trace ID of the event
+          example: "T5678"
         event_type:
           type: string
-          example: EVENT1
-        anomaly_type:
-          type: string
-          example: Too High
+          description: Type of the event (`PlayerActivityEvent` or `ServerPerformanceEvent`)
+          example: ServerPerformanceEvent
         description:
           type: string
-          example: "Detected: 150; too high (threshold 140)"
+          description: Description of the anomaly, including the value detected and the threshold exceeded
+          example: "CPU usage detected: 99%; threshold: 90%"
       type: object
-
