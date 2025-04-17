@@ -1,0 +1,127 @@
+openapi: 3.0.0
+info:
+  title: Server/Player Statistics Tracking API
+  description: API to receive and process server/player event data for private game servers.
+  contact:
+    email: support@gametracker.com
+  version: 1.0.0
+servers:
+  - url: /
+paths:
+  /events/player:
+    get:
+      summary: Fetch player activity events within a date range
+      description: Fetch player activity events based on the provided start and end timestamps.
+      operationId: app.get_player_events
+      parameters:
+        - name: start_timestamp
+          in: query
+          description: The start timestamp for filtering events.
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: end_timestamp
+          in: query
+          description: The end timestamp for filtering events.
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: A list of player events matching the date range.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlayerActivityEvent'
+        "400":
+          description: Invalid input, malformed timestamp.
+
+  /events/server:
+    get:
+      summary: Fetch server performance events within a date range
+      description: Fetch server performance events based on the provided start and end timestamps.
+      operationId: app.get_server_events
+      parameters:
+        - name: start_timestamp
+          in: query
+          description: The start timestamp for filtering events.
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: end_timestamp
+          in: query
+          description: The end timestamp for filtering events.
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: A list of server events matching the date range.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServerPerformanceEvent'
+        "400":
+          description: Invalid input, malformed timestamp.
+
+components:
+  schemas:
+    PlayerActivityEvent:
+      required:
+        - action
+        - player_id
+        - score
+        - server_id
+        - timestamp
+        - trace_id
+      type: object
+      properties:
+        player_id:
+          type: string
+          description: Unique identifier of the player
+        server_id:
+          type: string
+          description: Unique identifier of the server
+        action:
+          type: string
+          description: Action performed by the player
+        score:
+          type: integer
+          description: Points gained by the player
+        timestamp:
+          type: string
+          format: date-time
+        trace_id:
+          type: string
+          description: Unique trace identifier for tracking
+    ServerPerformanceEvent:
+      required:
+        - cpu_usage
+        - memory_usage
+        - server_id
+        - timestamp
+        - uptime
+        - trace_id
+      type: object
+      properties:
+        server_id:
+          type: string
+        uptime:
+          type: integer
+        cpu_usage:
+          type: number
+        memory_usage:
+          type: number
+        timestamp:
+          type: string
+          format: date-time
+        trace_id:
+          type: string
