@@ -97,8 +97,24 @@ services:
       - ./logs:/logs  # Bind mount logs directory
       - ./data:/data  # Bind mount for the processing JSON file
 
+  nginx-dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - processing-service
+      - analyzer-service
+    networks:
+      - backend
+
 # Volumes for persistent data
 volumes:
   my-db:  # Named volume for MySQL data
   zk-data:  # Named volume for Zookeeper data
   kafka-data:  # Named volume for Kafka data
+
+networks:
+  backend:
+    driver: bridge
