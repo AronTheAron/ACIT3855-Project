@@ -1,0 +1,6 @@
+version: 1
+events:
+  kafka:
+    hostname: kafka   # Change localhost to kafka
+    port: 9092
+    topic: events
