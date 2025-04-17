@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .stats, .analyzer { margin-bottom: 20px; }
+        img { max-width: 100%; height: auto; }
+        .last-updated { font-size: 0.9em; color: gray; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>System Dashboard</h1>
+        <img src="your-logo.png" alt="System Logo">
+        
+        <div class="stats">
+            <h3>Current Statistics</h3>
+            <pre id="stats">Loading...</pre>
+        </div>
+        
+        <div class="analyzer">
+            <h3>Analyzer Information</h3>
+            <pre id="analyzer">Loading...</pre>
+        </div>
+
+        <div class="random-event">
+            <h3>Random Event</h3>
+            <pre id="random-event">Loading...</pre>
+        </div>
+
+        <div class="last-updated">
+            <p>Last updated: <span id="last-updated">N/A</span></p>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
