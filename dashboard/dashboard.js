@@ -1,6 +1,9 @@
-const statsUrl = 'http://processing:8110/stats';  // service URL
-const analyzerUrl = 'http://analyzer:8100/analyzer'; // analyzer service URL
-const randomEventUrl = 'http://analyzer:8100/random-event'; // random event endpoint
+const host = 'aw-project3855-w2025.eastus2.cloudapp.azure.com';
+
+const statsUrl = `http://${host}:8110/stats`;
+const analyzerUrl = `http://${host}:8100/analyzer`;
+const randomEventUrl = `http://${host}:8100/random-event`;
+
 
 // Function to fetch and update statistics
 async function fetchStats() {
