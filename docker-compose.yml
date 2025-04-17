@@ -1,0 +1,104 @@
+version: '3.7'
+
+services:
+  # MySQL Database Service
+  db:
+    image: mysql
+    environment:
+      MYSQL_USER: aron
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: database3855
+    volumes:
+      - my-db:/var/lib/mysql # Named volume for MySQL data
+      - ./config/db:/config  # Bind mount config files for MySQL (if needed)
+      - ./logs:/logs  # Bind mount logs directory
+
+  # Zookeeper Service (required for Kafka)
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    volumes:
+      - zk-data:/data  # Named volume for Zookeeper data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  # Kafka Service
+  kafka:
+    image: wurstmeister/kafka
+    command: [start-kafka.sh]
+    environment:
+      KAFKA_CREATE_TOPICS: "events:1:1"  # topic:partition:replicas
+      KAFKA_ADVERTISED_HOST_NAME: kafka  # docker-machine ip
+      KAFKA_LISTENERS: INSIDE://:29092,OUTSIDE://:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:29092,OUTSIDE://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - kafka-data:/var/lib/kafka/data  # Named volume for Kafka data
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - "zookeeper"
+
+  # Receiver Service
+  receiver:
+    build:
+      context: ./receiver
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "kafka"
+      - "db"
+    volumes:
+      - ./config/receiver:/config  # Bind mount config files for receiver
+      - ./logs:/logs  # Bind mount logs directory
+
+  # Storage Service
+  storage:
+    build:
+      context: ./storage
+      dockerfile: Dockerfile
+    depends_on:
+      - "kafka"
+      - "db"
+    volumes:
+      - ./config/storage:/config  # Bind mount config files for storage
+      - ./logs:/logs  # Bind mount logs directory
+
+  # Analyzer Service
+  analyzer:
+    build:
+      context: ./analyzer
+      dockerfile: Dockerfile
+    ports:
+      - "8100:8100"
+    depends_on:
+      - "kafka"
+    volumes:
+      - ./config/analyzer:/config  # Bind mount config files for analyzer
+      - ./logs:/logs  # Bind mount logs directory
+
+  # Processing Service
+  processing:
+    build:
+      context: ./processing
+      dockerfile: Dockerfile
+    ports:
+      - "8110:8110"
+    depends_on:
+      - "kafka"
+      - "db"
+    volumes:
+      - ./config/processing:/config  # Bind mount config files for processing
+      - ./logs:/logs  # Bind mount logs directory
+      - ./data:/data  # Bind mount for the processing JSON file
+
+# Volumes for persistent data
+volumes:
+  my-db:  # Named volume for MySQL data
+  zk-data:  # Named volume for Zookeeper data
+  kafka-data:  # Named volume for Kafka data
