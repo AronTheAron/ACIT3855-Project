@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  title: Server/Player Statistics Tracking API
+  description: API to receive and process server/player event data for private game servers.
+  contact:
+    email: support@gametracker.com
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /events/player:
+    post:
+      summary: Receives player activity events
+      description: Receives and stores player activity data such as actions taken by players during gameplay.
+      operationId: app.receive_player_event
+      requestBody:
+        description: Player activity event to store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayerActivityEvent'
+      responses:
+        "201":
+          description: Player activity event created
+        "400":
+          description: "Invalid input, object invalid"
+  /events/server:
+    post:
+      summary: Receives server performance events
+      description: Receives and stores server performance metrics such as CPU usage and uptime.
+      operationId: app.receive_server_event
+      requestBody:
+        description: Server performance event to store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServerPerformanceEvent'
+      responses:
+        "201":
+          description: Server performance event created
+        "400":
+          description: "Invalid input, object invalid"
+components:
+  schemas:
+    PlayerActivityEvent:
+      required:
+      - action
+      - player_id
+      - score
+      - server_id
+      - timestamp
+      type: object
+      properties:
+        player_id:
+          type: string
+          description: Unique identifier of the player
+          example: "12345"
+        server_id:
+          type: string
+          description: Unique identifier of the server where the player is playing
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        action:
+          type: string
+          description: "Action performed by the player (e.g., killed_monster, looted_item)"
+          example: killed_monster
+        score:
+          type: integer
+          description: Numeric value representing the score or points gained by the player
+          example: 100
+        timestamp:
+          type: string
+          description: Timestamp when the action was performed
+          format: date-time
+          example: 2025-01-09T13:15:30
+    ServerPerformanceEvent:
+      required:
+      - cpu_usage
+      - memory_usage
+      - server_id
+      - timestamp
+      - uptime
+      type: object
+      properties:
+        server_id:
+          type: string
+          description: Unique identifier of the server
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        uptime:
+          type: integer
+          description: Time the server has been online in seconds
+          example: 7200
+        cpu_usage:
+          type: number
+          description: CPU usage percentage
+          format: float
+          example: 78.5
+        memory_usage:
+          type: number
+          description: Memory usage percentage
+          format: float
+          example: 63.2
+        timestamp:
+          type: string
+          description: Timestamp when the performance data was captured
+          format: date-time
+          example: 2025-01-09T13:15:30.000000
