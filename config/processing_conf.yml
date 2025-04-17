@@ -1,0 +1,7 @@
+version: 1
+datastore:
+  filename: stats.json
+eventstore:
+  url: "http://storage:8090/events"  # Change localhost to storage
+scheduler:
+  interval: 15  # Runs populate_stats every 15 seconds

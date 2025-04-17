@@ -1,0 +1,12 @@
+version: 1
+datastore:
+  user: aron
+  password: password
+  hostname: db  # Change localhost to db
+  port: 3306
+  db: database3855
+events:
+  kafka:
+    hostname: kafka  # Change localhost to kafka
+    port: 9092
+    topic: events

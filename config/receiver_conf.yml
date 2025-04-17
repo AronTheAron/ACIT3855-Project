@@ -1,0 +1,10 @@
+version: 1
+events:
+  player:
+    url: http://storage:8090/events/player  # Change localhost to storage
+  server:
+    url: http://storage:8090/events/server  # Change localhost to storage
+  kafka:  
+    hostname: kafka  # Change localhost to kafka
+    port: 9092
+    topic: events
