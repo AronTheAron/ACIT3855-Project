@@ -1,4 +1,4 @@
 FROM nginx:latest
 COPY dashboard.html /usr/share/nginx/html/index.html
 COPY dashboard.js /usr/share/nginx/html/dashboard.js
-COPY your-logo.png /usr/share/nginx/html/your-logo.png  # Replace with your actual logo image
+COPY bocchi-the-blob.png /usr/share/nginx/html/bocchi-the-blob.png
